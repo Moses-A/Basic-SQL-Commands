@@ -1,0 +1,283 @@
+Some SQL code:
+
+
+CREATE TABLE music ( 
+  music_id     NUMBER(2) NOT NULL, 
+  artist_name VARCHAR2(20), 
+  type        VARCHAR2(13), 
+  CONSTRAINT music_primary_key PRIMARY KEY (music_id));
+
+
+
+INSERT INTO music VALUES (1, 'Blake Shelton', 'Country');
+
+
+
+SELECT e.last_name EMPLOYEE, e.hire_date "EMP HIRED", 
+  m.last_name MANAGER, e.hire_date AS "MGR HIRED" 
+ FROM employees e JOIN employees m
+ ON (m.employee_id = e.manager_id)
+AND e.hire_date < m.hire_date
+ORDER BY e.last_name;
+
+
+
+SELECT last_name, 
+address || ', ' || city || ', ' || state || ' ' || zip
+As "Mailing Address"
+FROM f_customers;
+
+
+
+SELECT last_name,
+  TO_CHAR(NVL(overtime_rate, 5), '$99,999.99') AS "Overtime Rate"
+ FROM f_staffs;
+
+
+
+RENAME o_jobs to o_job_description;
+
+
+
+DESCRIBE o_job_description;
+
+
+
+SELECT e.name, e.event_date, p.code
+  FROM d_events e, d_packages p 
+ WHERE e.cost BETWEEN p.low_range AND p.high_range;
+
+
+
+SELECT d.department_id, d.department_name, e.last_name
+FROM employees e, departments d
+WHERE e.department_id (+) = d.department_id;
+
+
+
+SELECT s.title, t.description, s.artist
+ FROM d_songs s, d_types t
+ WHERE s.type_code = t.code
+ AND s.id IN (47, 48);
+
+
+
+
+GRANT select, insert
+  ON MUSIC
+  TO US_1783_SQL01_S28
+ WITH GRANT OPTION;
+
+
+
+CREATE OR REPLACE VIEW read_copy_d_cds
+  AS SELECT *
+      FROM copy_d_cds
+      WHERE year = 2000
+   WITH CHECK OPTION CONSTRAINT ck_cread_copy_d_cds;
+
+
+
+
+SELECT * FROM read_copy_d_cds;
+
+
+CREATE VIEW  view_copy_d_songs1
+   AS SELECT title, artist
+       FROM copy_d_songs;
+
+
+
+
+SELECT * FROM view_copy_d_songs1;
+
+
+
+SELECT first_name || ', ' || last_name AS "Name", 
+     department_id AS "Dept. ID", TO_CHAR(salary, '$99,999') AS "Salary"
+ FROM employees OUTER 
+WHERE 'x' in (SELECT 'x'
+                FROM employees inner
+                 WHERE inner.manager_id = outer.employee_id)
+ORDER BY department_id;
+
+
+
+SELECT table_name, column_name, updatable, insertable, deletable
+ FROM USER_UPDATABLE_COLUMNS
+  WHERE table_name = 'COPY_D_SONGS';
+  
+  
+
+SELECT table_name, column_name, updatable, insertable, deletable
+ FROM USER_UPDATABLE_COLUMNS
+  WHERE table_name = 'COPY_D_EVENTS';
+  
+  
+
+SELECT table_name, column_name, updatable, insertable, deletable
+ FROM USER_UPDATABLE_COLUMNS
+  WHERE table_name = 'COPY_D_CDS';
+  
+  
+  
+
+SELECT table_name, column_name, updatable, insertable, deletable
+ FROM USER_UPDATABLE_COLUMNS
+  WHERE table_name = 'COPY_D_CLIENTS';
+  
+  
+
+SELECT job_id AS "Job ID", employee_id, hire_date AS "Hire Date", department_id AS "Department ID"
+ FROM employees
+UNION ALL
+SELECT job_id, employee_id, start_date, department_id
+ FROM job_history
+   ORDER BY employee_id;
+   
+   
+   
+
+SELECT TO_CHAR(MIN(salary), '$99,999') AS "Lowest Salary", MAX(hire_date) AS "Recent Hire Date",
+ MIN(last_name) AS "Min Last Name", Max(last_name) AS "Max first Name"
+  FROM employees
+WHERE department_id IN (50,60);
+
+
+
+SELECT 'Mr./Ms. '||first_name||' '||last_name ||' '||'is an employee of our company.' AS  "Employees" 
+                   FROM employees ;
+                   
+                   
+                   
+
+SELECT song_id AS "Song ID", cd_number "CD Number", 
+title AS "Title", comments AS "Comments"
+ FROM d_play_list_items JOIN d_track_listings
+ USING (song_id)
+JOIN d_cds USING (cd_number);
+
+
+
+
+SELECT last_name ||', '|| first_name AS " Employee Name"
+ FROM f_staffs
+WHERE (salary) > (SELECT salary
+                        FROM f_staffs
+                       WHERE ID = 12);
+                       
+                       
+                       
+                       
+
+Create TABLE manager_copy_d_cds AS 
+      (SELECT * FROM d_cds);
+
+
+
+SELECT * FROM manager_copy_d_cds;
+
+
+
+INSERT INTO manager_copy_d_cds
+ VALUES(101, 'Ne-Yo', 'Motown', 2012)
+
+
+
+MERGE INTO manager_copy_d_cds m USING d_cds d
+  ON(m.cd_number = d.cd_number)
+ WHEN MATCHED THEN UPDATE 
+  SET m.title =d.title, 
+     m.producer = d.producer,
+     m.year = d.year
+ WHEN NOT MATCHED THEN INSERT 
+VALUES(d.cd_number, d.title, d.producer, d.year);
+
+
+
+SELECT * FROM manager_copy_d_cds;
+
+UPDATE copy_f_staffs
+ SET salary =10
+  WHERE id = 12;
+
+
+
+
+
+SELECT versions_starttime "Start", 
+       versions_endtime "End",
+       TO_CHAR(salary, '$99') SALARY
+  FROM copy_f_staffs
+  VERSIONS BETWEEN SCN MINVALUE and MAXVALUE;
+  
+  
+
+CREATE TABLE time1
+( ship_date TIMESTAMP WITH TIME ZONE,
+receive_date TIMESTAMP WITH LOCAL TIME ZONE);
+
+
+
+INSERT INTO time1 (ship_date, receive_date)
+VALUES
+('18/DEC/2015 09:00:00 AM -05:00', '19/MAY/2015 12:00:00');
+
+
+
+SELECT * FROM time1;
+
+
+
+CREATE TABLE time1
+( ship_date TIMESTAMP WITH TIME ZONE,
+receive_date TIMESTAMP WITH LOCAL TIME ZONE);
+
+
+
+INSERT INTO time1 (ship_date, receive_date)
+VALUES
+('18/DEC/2015 09:00:00 AM -05:00', '19/MAY/2015 12:00:00');
+
+
+
+SELECT * FROM time1;
+
+
+
+
+CREATE INDEX cd_number_idx
+  ON D_track_listings(cd_number);
+
+
+SELECT ic.index_name,
+       ic.column_name,
+       ic.column_position col_pos,
+       ix.uniqueness
+ FROM user_indexes ix, user_ind_columns ic
+ WHERE ic.index_name = ix.index_name
+ AND ic.table_name = 'D_TRACK_LISTINGS';
+ 
+ 
+
+SELECT TO_CHAR(TO_DATE('04/JUL/2013', 'DD/MON/YYYY'), 'fmMonth ddth, YYYY') AS "Convert A",
+    TO_CHAR(TO_DATE('04/JUL/2013', 'dd/MON/YYYY'), 'fmMONTH DDth, YYYY') AS "Convert B",
+    TO_CHAR(TO_DATE('04/JUL/2013', 'dd/MON/YYYY'), 'fmmonth ddth, YYYY') AS "Convert C"
+FROM DUAL;
+
+
+
+SELECT ROWNUM as RANK, 
+        last_name || ', ' || first_name AS "Name",
+        TO_CHAR(salary, '$99,999') AS "Salary"
+  FROM (SELECT last_name, first_name, salary
+        FROM employees
+    ORDER BY salary DESC)
+WHERE ROWNUM <=3;
+
+
+     
+ALTER TABLE copy_d_events
+ ADD CONSTRAINT copy_d_events_fk  FOREIGN KEY (client_number)
+  REFERENCES copy_d_clients (client_number);
+
