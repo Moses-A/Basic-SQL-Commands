@@ -1,6 +1,5 @@
 Some SQL code:
 
-
 CREATE TABLE music ( 
   music_id     NUMBER(2) NOT NULL, 
   artist_name VARCHAR2(20), 
@@ -8,9 +7,7 @@ CREATE TABLE music (
   CONSTRAINT music_primary_key PRIMARY KEY (music_id));
 
 
-
 INSERT INTO music VALUES (1, 'Blake Shelton', 'Country');
-
 
 
 SELECT e.last_name EMPLOYEE, e.hire_date "EMP HIRED", 
@@ -37,22 +34,16 @@ SELECT last_name,
 
 RENAME o_jobs to o_job_description;
 
-
-
 DESCRIBE o_job_description;
-
 
 
 SELECT e.name, e.event_date, p.code
   FROM d_events e, d_packages p 
  WHERE e.cost BETWEEN p.low_range AND p.high_range;
 
-
-
 SELECT d.department_id, d.department_name, e.last_name
 FROM employees e, departments d
 WHERE e.department_id (+) = d.department_id;
-
 
 
 SELECT s.title, t.description, s.artist
@@ -62,12 +53,10 @@ SELECT s.title, t.description, s.artist
 
 
 
-
 GRANT select, insert
   ON MUSIC
   TO US_1783_SQL01_S28
  WITH GRANT OPTION;
-
 
 
 CREATE OR REPLACE VIEW read_copy_d_cds
@@ -77,21 +66,13 @@ CREATE OR REPLACE VIEW read_copy_d_cds
    WITH CHECK OPTION CONSTRAINT ck_cread_copy_d_cds;
 
 
-
-
 SELECT * FROM read_copy_d_cds;
-
 
 CREATE VIEW  view_copy_d_songs1
    AS SELECT title, artist
        FROM copy_d_songs;
 
-
-
-
 SELECT * FROM view_copy_d_songs1;
-
-
 
 SELECT first_name || ', ' || last_name AS "Name", 
      department_id AS "Dept. ID", TO_CHAR(salary, '$99,999') AS "Salary"
@@ -100,8 +81,6 @@ WHERE 'x' in (SELECT 'x'
                 FROM employees inner
                  WHERE inner.manager_id = outer.employee_id)
 ORDER BY department_id;
-
-
 
 SELECT table_name, column_name, updatable, insertable, deletable
  FROM USER_UPDATABLE_COLUMNS
@@ -118,9 +97,7 @@ SELECT table_name, column_name, updatable, insertable, deletable
 SELECT table_name, column_name, updatable, insertable, deletable
  FROM USER_UPDATABLE_COLUMNS
   WHERE table_name = 'COPY_D_CDS';
-  
-  
-  
+
 
 SELECT table_name, column_name, updatable, insertable, deletable
  FROM USER_UPDATABLE_COLUMNS
@@ -258,13 +235,11 @@ SELECT ic.index_name,
  WHERE ic.index_name = ix.index_name
  AND ic.table_name = 'D_TRACK_LISTINGS';
  
- 
 
 SELECT TO_CHAR(TO_DATE('04/JUL/2013', 'DD/MON/YYYY'), 'fmMonth ddth, YYYY') AS "Convert A",
     TO_CHAR(TO_DATE('04/JUL/2013', 'dd/MON/YYYY'), 'fmMONTH DDth, YYYY') AS "Convert B",
     TO_CHAR(TO_DATE('04/JUL/2013', 'dd/MON/YYYY'), 'fmmonth ddth, YYYY') AS "Convert C"
 FROM DUAL;
-
 
 
 SELECT ROWNUM as RANK, 
@@ -275,9 +250,6 @@ SELECT ROWNUM as RANK,
     ORDER BY salary DESC)
 WHERE ROWNUM <=3;
 
-
-     
 ALTER TABLE copy_d_events
  ADD CONSTRAINT copy_d_events_fk  FOREIGN KEY (client_number)
   REFERENCES copy_d_clients (client_number);
-
