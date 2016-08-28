@@ -25,7 +25,6 @@ As "Mailing Address"
 FROM f_customers;
 
 
-
 SELECT last_name,
   TO_CHAR(NVL(overtime_rate, 5), '$99,999.99') AS "Overtime Rate"
  FROM f_staffs;
