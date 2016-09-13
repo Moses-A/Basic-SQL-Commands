@@ -1,3 +1,4 @@
 # Very-Basic-SQL-Coding
-Used as a reference for whenever using SQL with Python (SQLite) and MySQL with C++.
-Just provided to such a basic understanding of how databases work and the language of SQL.
+Used as a reference for whenever using SQLite with Python and MySQL with C++.
+
+Just provided to such a basic understanding of how databases work and the language of MySQL.
