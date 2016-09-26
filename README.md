@@ -1,4 +1,4 @@
-# Attention
+# Attention.
 
 Used as a reference for whenever using SQLite with Python and MySQL with C++.
 
